@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import React from 'react'
-import PersonForm from './personform'
-import Persons from './Persons'
+import PersonForm from './components/personform'
+import Persons from './components/Persons'
 import personService from './services/personservices'
-import FilterForm from './Filter'
+import FilterForm from './components/Filter'
 
 
 const App = () => {
