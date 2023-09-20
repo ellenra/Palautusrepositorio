@@ -4,13 +4,37 @@ import PersonForm from './components/personform'
 import Persons from './components/Persons'
 import personService from './services/personservices'
 import FilterForm from './components/Filter'
+import './index.css'
 
+const GoodNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="good">
+      {message}
+    </div>
+  )
+}
+
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '040-123456' , id : 1}]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [goodMessage, setGoodMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -47,6 +71,18 @@ const App = () => {
             setNewName('')
             setNewNumber('')
             setNewFilter('')
+            setGoodMessage(`${newcontact.name}'s number changed!`)
+            setTimeout(() => {
+            setGoodMessage(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setErrorMessage(
+              `Information of '${noteObject.name}' has already been removed from server`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
         }
       }
@@ -57,6 +93,11 @@ const App = () => {
         setPersons(persons.concat(newperson))
         setNewName('')
         setNewNumber('')
+        setNewFilter('')
+        setGoodMessage(`Added ${newperson.name}!`)
+        setTimeout(() => {
+          setGoodMessage(null)
+        }, 5000)
       })
     }}
 
@@ -84,6 +125,10 @@ const App = () => {
       .remove(noteObject.id)
       .then(newperson => {
         setPersons(persons.filter(p => p.id !== noteObject.id))
+        setGoodMessage(`Number deleted!`)
+        setTimeout(() => {
+          setGoodMessage(null)
+        }, 5000)
       })
     }
   }
@@ -97,6 +142,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <GoodNotification message={goodMessage} />
+      <ErrorNotification message={errorMessage} />
       <FilterForm handleFilterSubmit={handleFilterSubmit} newFilter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>Add a new contact</h2>
       <PersonForm
