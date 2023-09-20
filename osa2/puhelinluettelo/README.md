@@ -1,2 +1,1 @@
-# Fullstack 2023
 
