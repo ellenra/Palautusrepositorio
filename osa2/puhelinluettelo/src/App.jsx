@@ -89,7 +89,7 @@ const App = () => {
     } else {
       personService
       .create(noteObject)
-      .then(newperson => {
+       .then(newperson => {
         setPersons(persons.concat(newperson))
         setNewName('')
         setNewNumber('')
@@ -99,7 +99,14 @@ const App = () => {
           setGoodMessage(null)
         }, 5000)
       })
-    }}
+      .catch(error => {
+        setErrorMessage(`Name '${noteObject.name}' or number '${noteObject.number}' is shorter than the minimun allowed length.`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    }
+}
 
   const handleNoteChange = (event) => {
     console.log(event.target.value)
