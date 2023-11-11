@@ -46,9 +46,7 @@ const App = () => {
 
   const addNote = (event) => {
     event.preventDefault()
-    if(newName.length === 0) {
-      return
-    }
+
     const noteObject = {
       name: newName,
       number: newNumber
@@ -100,7 +98,7 @@ const App = () => {
         }, 5000)
       })
       .catch(error => {
-        setErrorMessage(`Name '${noteObject.name}' or number '${noteObject.number}' is shorter than the minimun allowed length.`)
+        setErrorMessage(`Ǹame is shorter than the minimum allowed length (3) or number is not in correct form`)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
