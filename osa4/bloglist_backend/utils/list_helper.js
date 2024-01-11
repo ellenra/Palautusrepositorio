@@ -16,9 +16,45 @@ const favoriteBlog = (blogs) => {
     }
 }
 
+const mostBlogs = (blogs) => {
+    const blogDict = {}
+    blogs.forEach((blog) => {
+        if (blog.author in blogDict) {
+            blogDict[blog.author] += 1
+        }
+        else {
+            blogDict[blog.author] = 1
+        }
+    })
+    const blogAuthor = Object.keys(blogDict).reduce((a, b) => blogDict[a] > blogDict[b] ? a : b)
+    return {
+        author: blogAuthor,
+        blogs: blogDict[blogAuthor]
+    }
+}
+
+const mostLikes = (blogs) => {
+    const blogDict = {}
+    blogs.forEach((blog) => {
+        if (blog.author in blogDict) {
+            blogDict[blog.author] += blog.likes
+        }
+        else {
+            blogDict[blog.author] = blog.likes
+        }
+    })
+    const blogAuthor = Object.keys(blogDict).reduce((a, b) => blogDict[a] > blogDict[b] ? a : b)
+    return {
+        author: blogAuthor,
+        likes: blogDict[blogAuthor]
+    }
+}
+
 
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs,
+    mostLikes
 }

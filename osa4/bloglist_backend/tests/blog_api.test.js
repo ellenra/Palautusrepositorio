@@ -8,10 +8,26 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const Blog = require('../models/blog')
 
+const initialUsers = [
+  {
+      username: 'testaaja',
+      name: 'testaaja123'
+  }
+]
+
+const initialTestUsers = async() => {
+  const saltRounds = 10
+  await User.deleteMany({})
+  initialUsers[0].passwordHash = await bcrypt.hash('Pepe', saltRounds)
+  let userObject = new User(initialUsers[0])
+  await userObject.save()
+}
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
   })
+
 
 test('blogs are returned as json', async () => {
   await api
@@ -31,17 +47,21 @@ test('id is defined', async() => {
     expect(response.body[0].id).toBeDefined()
 })
 
-test('a blog can be added ', async () => {
+test('a blog can be added with valid token', async () => {
     const newBlog = {
       title: 'Best blog ever',
       author: 'Ellen',
       url: 'ellen.com',
       likes: 10000
     }
-  
+
+    const login = await api.post('/api/login').send({ username: 'testaaja', password: 'testaaja123' })
+    const token = login.body.token
+
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -73,7 +93,7 @@ test('a blog can be deleted', async() => {
 
 })
 
-test('if likes is empty return 0', async () => {
+test('if likes empty return 0', async () => {
     const newBlog = {
         title: 'Bad blog',
         author: 'Kirjoittaja',
@@ -82,7 +102,7 @@ test('if likes is empty return 0', async () => {
 
     await api
         .post('/api/blogs')
-        .set('Authorization', 'Bearer ${token}')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
