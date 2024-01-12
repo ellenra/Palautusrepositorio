@@ -88,14 +88,12 @@ const App = () => {
     }, 5000)
   }
 
-  const handleNewBlog = ({ title, author, url }) => {
+  const handleNewBlog = async ({ title, author, url }) => {
     try {
       console.log('addind new blog...', title, author, url)
-      blogService
+      const blogToAdd = await blogService
         .create({ title, author, url })
-        .then(returned => {
-          setBlogs(blogs.concat(returned))
-        })
+      setBlogs(blogs.concat(blogToAdd))
       console.log('blog added')
       setAddBlogVisible(false)
       setGoodMessage('New blog added!')
@@ -131,6 +129,10 @@ const App = () => {
       await blogService.deleteBlog(blog)
       const blogs = await blogService.getAll()
       setBlogs(blogs)
+      setGoodMessage('Blog deleted!')
+      setTimeout(() => {
+        setGoodMessage(null)
+      }, 5000)
     } catch (exception) {
       console.error('error:', exception)
       setErrorMessage('Could not delete blog')
@@ -151,6 +153,7 @@ const App = () => {
         <div style={hideWhenVisible}>
           <button onClick={() => setAddBlogVisible(true)}>new note</button>
         </div>
+        <div style={{ margin: '10px 0' }}></div>
         <div style={showWhenVisible}>
           <BlogForm
             handleNewBlog={handleNewBlog}

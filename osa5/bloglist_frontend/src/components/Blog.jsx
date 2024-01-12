@@ -1,11 +1,19 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
+import '../index.css'
 
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [showBlog, setShowBlog] = useState(false)
   const hideWhenVisible = { display: showBlog ? 'none' : '' }
   const showWhenVisible = { display: showBlog ? '' : 'none' }
+  const blogStyle = {
+    paddingTop: 8,
+    paddingLeft: 5,
+    paddingBottom: 8,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5,
+  }
 
   const addLikeToBlog = () => {
     const updatedBlog = {
@@ -24,8 +32,8 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   }
 
   return (
-    <div className="blog">
-      <div style={hideWhenVisible}>
+    <div style={blogStyle} className="blog">
+      <div style={hideWhenVisible} className="blogView">
         {blog.title}
         <button onClick={() => setShowBlog(true)}>view</button>
       </div>
@@ -45,13 +53,6 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
       </div>
     </div>
   )
-}
-
-Blog.propTypes = {
-  updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
-  blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
 }
 
 export default Blog
