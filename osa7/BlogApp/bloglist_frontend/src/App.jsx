@@ -55,7 +55,7 @@ const App = () => {
   }
 
   const padding = {
-    padding: 5
+    padding: 5,
   }
 
   if (user === null) {
@@ -90,16 +90,20 @@ const App = () => {
         </form>
       </div>
     )
-}
+  }
 
   return (
     <Router>
       <div>
-        <Link style={padding} to='/'>home</Link>
-        <Link style={padding} to='/users'>users</Link>
+        <Link style={padding} to='/'>
+          home
+        </Link>
+        <Link style={padding} to='/users'>
+          users
+        </Link>
       </div>
       <div>
-      <h2>Blog App</h2>
+        <h2>Blog App</h2>
         <Notification />
         <p>{user.name} logged in </p>
         <button id='logout-button' onClick={handleLogout}>
@@ -109,8 +113,8 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home user={user} />} />
         <Route path='/users' element={<Users />} />
-        <Route path='/users/:id' element={<User />}/>
-        <Route path='/blogs/:id' element={<BlogView user={user}/>} />
+        <Route path='/users/:id' element={<User />} />
+        <Route path='/blogs/:id' element={<BlogView user={user} />} />
       </Routes>
     </Router>
   )

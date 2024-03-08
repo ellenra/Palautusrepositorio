@@ -34,10 +34,8 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   return (
     <div style={blogStyle} className='blog'>
       <div style={hideWhenVisible} className='blogView'>
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title}
-      </Link>
-      <button onClick={() => setShowBlog(true)}>view</button>
+        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+        <button onClick={() => setShowBlog(true)}>view</button>
       </div>
       <div style={showWhenVisible}>
         <div>{blog.title}</div>

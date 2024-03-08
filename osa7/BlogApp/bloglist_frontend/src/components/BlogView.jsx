@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
-import blogService from "../services/blogs"
+import blogService from '../services/blogs'
 import userService from '../services/users'
 
 const BlogView = ({ user }) => {
@@ -42,21 +42,17 @@ const BlogView = ({ user }) => {
     updateBlog(updatedBlog)
   }
 
-  return(
+
+  return (
     <div>
       <h2>{blog.title}</h2>
-        <div>Author: {blog.author}</div>
-        <div>Url: {blog.url}</div>
-        <div>
-          {blog.likes} likes
-          <button onClick={() => addLikeToBlog()}>like</button>
-        </div>
-        <div>{blog.user.name}</div>
-        <div>
-          {blog.user && blog.user.username === user?.username && (
-            <button onClick={() => delBlog()}>delete</button>
-          )}
-        </div>
+      <div>Author: {blog.author}</div>
+      <div>Url: {blog.url}</div>
+      <div>
+        {blog.likes} likes
+        <button onClick={() => addLikeToBlog()}>like</button>
+      </div>
+      <div>{blog.user.name}</div>
     </div>
   )
 }
