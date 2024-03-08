@@ -10,7 +10,9 @@ const BlogForm = ({ handleNewBlog }) => {
     event.preventDefault()
     console.log('adding new blog')
     handleNewBlog({
-      title, author, url
+      title,
+      author,
+      url,
     })
     setTitle('')
     setAuthor('')
@@ -22,44 +24,45 @@ const BlogForm = ({ handleNewBlog }) => {
       <h2>Create new</h2>
       <form onSubmit={newBlog}>
         <div>
-            title:
+          title:
           <input
             id='title'
-            type="text"
+            type='text'
             value={title}
             onChange={(event) => setTitle(event.target.value)}
-            placeholder="title"
+            placeholder='title'
           />
         </div>
         <div>
-            author:
+          author:
           <input
             id='author'
-            type="text"
+            type='text'
             value={author}
             onChange={(event) => setAuthor(event.target.value)}
-            placeholder="author"
+            placeholder='author'
           />
         </div>
         <div>
-            url:
+          url:
           <input
             id='url'
-            type="text"
+            type='text'
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            placeholder="url"
+            placeholder='url'
           />
         </div>
-        <button id='newblog-button' type="submit">create</button>
+        <button id='newblog-button' type='submit'>
+          create
+        </button>
       </form>
     </div>
   )
-
 }
 
 BlogForm.propTypes = {
-  handleNewBlog: PropTypes.func.isRequired
+  handleNewBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm

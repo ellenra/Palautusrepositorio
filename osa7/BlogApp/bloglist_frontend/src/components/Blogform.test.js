@@ -21,5 +21,9 @@ test('Test if blogform works correctly', async () => {
   await user.click(sendButton)
 
   expect(handleNewBlog.mock.calls).toHaveLength(1)
-  expect(handleNewBlog.mock.calls[0][0]).toEqual({ title: 'hey', author: 'heyy', url: 'hi.com' })
+  expect(handleNewBlog.mock.calls[0][0]).toEqual({
+    title: 'hey',
+    author: 'heyy',
+    url: 'hi.com',
+  })
 })

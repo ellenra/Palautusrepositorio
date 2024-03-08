@@ -1,42 +1,42 @@
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     const user = {
       name: 'Ellen',
       username: 'ellenr',
-      password: 'salasana'
+      password: 'salasana',
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:5173')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.contains('log in to application')
   })
 
-  describe('Login', function() {
-    it('succeeds with correct credentials', function() {
+  describe('Login', function () {
+    it('succeeds with correct credentials', function () {
       cy.get('#username').type('ellenr')
       cy.get('#password').type('salasana')
       cy.get('#login-button').click()
       cy.contains('Ellen logged in')
     })
 
-    it('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function () {
       cy.get('#username').type('ellenr')
       cy.get('#password').type('wrongsalasana')
       cy.get('#login-button').click()
       cy.contains('Wrong username or password!')
     })
 
-    describe('When logged in', function() {
-      beforeEach(function() {
+    describe('When logged in', function () {
+      beforeEach(function () {
         cy.get('#username').type('ellenr')
         cy.get('#password').type('salasana')
         cy.get('#login-button').click()
       })
 
-      it('A blog can be created', function() {
+      it('A blog can be created', function () {
         cy.contains('new note').click()
         cy.get('#title').type('testiotsikko')
         cy.get('#author').type('testikirjoittaja')
@@ -45,7 +45,7 @@ describe('Blog app', function() {
         cy.contains('testiotsikko')
       })
 
-      it('A blog can be liked', function() {
+      it('A blog can be liked', function () {
         cy.contains('new note').click()
         cy.get('#title').type('testiotsikko')
         cy.get('#author').type('testikirjoittaja')
@@ -57,7 +57,7 @@ describe('Blog app', function() {
         cy.contains('1')
       })
 
-      it('A blog can be deleted', function() {
+      it('A blog can be deleted', function () {
         cy.contains('new note').click()
         cy.get('#title').type('testiotsikko')
         cy.get('#author').type('testikirjoittaja')
@@ -67,12 +67,12 @@ describe('Blog app', function() {
         cy.contains('0')
         cy.contains('like').click()
         cy.contains('1')
-        cy.on('window:confirm', () => true);
+        cy.on('window:confirm', () => true)
         cy.contains('delete').click()
         cy.contains('testiotsikko').should('not.exist')
       })
 
-      it('Delete button can only be seen by user who added the blog', function() {
+      it('Delete button can only be seen by user who added the blog', function () {
         cy.contains('new note').click()
         cy.get('#title').type('testiotsikko')
         cy.get('#author').type('testikirjoittaja')
@@ -81,7 +81,7 @@ describe('Blog app', function() {
         const user = {
           name: 'testi',
           username: 'test',
-          password: 'testii'
+          password: 'testii',
         }
         cy.request('POST', 'http://localhost:3003/api/users/', user)
         cy.get('#logout-button').click()
@@ -93,7 +93,7 @@ describe('Blog app', function() {
         cy.contains('delete').should('not.exist')
       })
 
-      it('Blogs are sorted by likes', function() {
+      it('Blogs are sorted by likes', function () {
         cy.contains('new note').click()
         cy.get('#title').type('keskimmäinen')
         cy.get('#author').type('kolmas')
@@ -126,8 +126,7 @@ describe('Blog app', function() {
         cy.get('.blog').eq(0).should('contain', 'tykätyin')
         cy.get('.blog').eq(1).should('contain', 'keskimmäinen')
         cy.get('.blog').eq(2).should('contain', 'eitykätyin')
-
+      })
     })
-  })
   })
 })

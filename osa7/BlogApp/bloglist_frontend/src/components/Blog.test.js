@@ -4,13 +4,12 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-
 test('renders content', () => {
   const blog = {
     title: 'Testing',
     author: 'testaaja',
     url: 'test.com',
-    likes: 10
+    likes: 10,
   }
 
   render(<Blog blog={blog} />)
@@ -27,7 +26,7 @@ test('renders all info when view button is clicked', async () => {
     title: 'Testing',
     author: 'testaaja',
     url: 'test.com',
-    likes: 10
+    likes: 10,
   }
 
   render(<Blog blog={blog} />)
@@ -51,12 +50,12 @@ test('like button pressed two times works', async () => {
     title: 'Testing',
     author: 'testaaja',
     url: 'test.com',
-    likes: 10
+    likes: 10,
   }
 
   const mockHandler = jest.fn()
 
-  render(<Blog blog={blog} updateBlog={mockHandler}/>)
+  render(<Blog blog={blog} updateBlog={mockHandler} />)
 
   const user = userEvent.setup()
   const button = screen.getByText('like')

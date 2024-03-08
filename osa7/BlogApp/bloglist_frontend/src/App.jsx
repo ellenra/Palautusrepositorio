@@ -1,29 +1,22 @@
-import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import BlogForm from './components/BlogForm'
-import Notification from './components/Notification'
-import './index.css'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-
+import Users from './components/Users'
+import './index.css'
+import Home from './components/Home'
+import loginService from './services/login'
+import blogService from './services/blogs'
+import Notification from './components/Notification'
+import User from './components/User'
+import BlogView from './components/BlogView'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const [addBlogVisible, setAddBlogVisible] = useState(false)
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -39,11 +32,10 @@ const App = () => {
     console.log('log in', username)
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -62,65 +54,8 @@ const App = () => {
     dispatch(setNotification('Logged out!', 'good'))
   }
 
-  const handleNewBlog = async ({ title, author, url }) => {
-    try {
-      console.log('addind new blog...', title, author, url)
-      const blogToAdd = await blogService
-        .create({ title, author, url })
-      setBlogs(blogs.concat(blogToAdd))
-      console.log('blog added')
-      dispatch(setNotification('New blog added!', 'goodnotification'))
-    } catch {
-      dispatch(setNotification('Could not add a new blog!', 'error'))
-    }
-  }
-
-  const updateBlog = async (blog) => {
-    console.log(blog)
-    try {
-      await blogService.update(blog)
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-      dispatch(setNotification('Liked a blog!', 'goodnotification'))
-    } catch (exception) {
-      console.error('error:', exception)
-      dispatch(setNotification('Could not update blog.', 'error'))
-    }
-  }
-
-  const deleteBlog = async (blog) => {
-    console.log(blog)
-    try {
-      await blogService.deleteBlog(blog)
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-      dispatch(setNotification('Blog deleted!', 'goodnotification'))
-    } catch (exception) {
-      console.error('error:', exception)
-      dispatch(setNotification('Could not delete blog.', 'error'))
-    }
-  }
-
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-
-  const blogForm = () => {
-    const hideWhenVisible = { display: addBlogVisible ? 'none' : '' }
-    const showWhenVisible = { display: addBlogVisible ? '' : 'none' }
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setAddBlogVisible(true)}>new note</button>
-        </div>
-        <div style={{ margin: '10px 0' }}></div>
-        <div style={showWhenVisible}>
-          <BlogForm
-            handleNewBlog={handleNewBlog}
-          />
-          <button onClick={() => setAddBlogVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
+  const padding = {
+    padding: 5
   }
 
   if (user === null) {
@@ -130,57 +65,55 @@ const App = () => {
         <Notification />
         <form onSubmit={handleLogin}>
           <div>
-          username
+            username
             <input
               id='username'
-              type="text"
-              name="username"
+              type='text'
+              name='username'
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />
           </div>
           <div>
-          password
+            password
             <input
               id='password'
-              type="text"
-              name="password"
+              type='text'
+              name='password'
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <button id="login-button" type="submit">Login</button>
+          <button id='login-button' type='submit'>
+            Login
+          </button>
         </form>
-
       </div>
     )
-  }
+}
 
   return (
     <Router>
       <div>
-        <Link to="/">home</Link>
-        <Link to="/users">users</Link>
-        <Link to="/blogs">blogs</Link>
+        <Link style={padding} to='/'>home</Link>
+        <Link style={padding} to='/users'>users</Link>
       </div>
-      <Routes>
-        <Route path="/users" element={<Users />} />
-        <Route path="/" element={<App />} />
-      </Routes>
       <div>
-        <h2>blogs</h2>
+      <h2>Blog App</h2>
         <Notification />
         <p>{user.name} logged in </p>
-        <button id="logout-button" onClick={handleLogout}>logout</button>
-        <p></p>
-        {blogForm()}
-        {sortedBlogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user}/>
-        )}
+        <button id='logout-button' onClick={handleLogout}>
+          logout
+        </button>
       </div>
+      <Routes>
+        <Route path='/' element={<Home user={user} />} />
+        <Route path='/users' element={<Users />} />
+        <Route path='/users/:id' element={<User />}/>
+        <Route path='/blogs/:id' element={<BlogView user={user}/>} />
+      </Routes>
     </Router>
   )
-
 }
 
 export default App
