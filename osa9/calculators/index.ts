@@ -24,24 +24,23 @@ app.get('/bmi', (req, res) => {
 });
 
 app.post('/exercises', (req, res) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const body = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const body: { target: number; times: number[]} = req.body;
     const length : number = Object.keys(body).length;
 
     if (length !== 2) {
         res.json({ error: 'Please provide two parameters' }).status(400);
         return;
     }
-    const target = Number(body.target);
-    const times = Object(body.times);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const target: number = body.target;
+    const times: number[] = body.times;
     if (isNaN(target) || !times.every((item: number) => typeof item === 'number' && !isNaN(item))) {
         res.json({ error: 'Malformatted parameters' }).status(400);
         return;
     }
 
     try {
-        const result = calculateExercises(Number(body.target), Object(body.times));
+        const result = calculateExercises(target, times);
         res.json(result).status(200);
     } catch (error: unknown) {
         if (error instanceof Error) {
